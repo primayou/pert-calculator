@@ -12,7 +12,7 @@
       text-align: center;
     }
     .container {
-      max-width: 400px;
+      max-width: 600px;
       margin: auto;
       background: white;
       padding: 2rem;
@@ -43,6 +43,26 @@
       font-size: 1.2rem;
       font-weight: bold;
     }
+    .button-submit {
+        background: #7F55B1;
+    }
+    table {
+      width: 100%;
+      margin-top: 2rem;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    th {
+      background-color: #7F55B1;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
   </style>
 </head>
 <body>
@@ -51,8 +71,30 @@
     <input type="number" id="optimistic" placeholder="Optimistic (O) in days" />
     <input type="number" id="mostLikely" placeholder="Most Likely (M) in days" />
     <input type="number" id="pessimistic" placeholder="Pessimistic (P) in days" />
-    <button onclick="calculatePERT()">Calculate</button>
+    <button class='button-submit' onclick="calculatePERT()">Calculate</button>
     <div class="result" id="output"></div>
+    <br>
+    <hr>
+    <br>
+    <h3>PERT Days to Story Points Mapping</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>PERT Estimate (Days)</th>
+          <th>Story Points</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>0.5 – 1</td><td>1</td><td>Very small, isolated task</td></tr>
+        <tr><td>2 – 3</td><td>2</td><td>Low complexity</td></tr>
+        <tr><td>4 – 5</td><td>3</td><td>Moderate complexity</td></tr>
+        <tr><td>6 – 8</td><td>5</td><td>Significant effort</td></tr>
+        <tr><td>9 – 13</td><td>8</td><td>High complexity</td></tr>
+        <tr><td>14 – 20</td><td>13</td><td>Large task</td></tr>
+        <tr><td>21+</td><td>20</td><td>Break it down or epic-level</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <script>
@@ -65,7 +107,7 @@
         document.getElementById("output").textContent = "Please enter all three values.";
         return;
       }
-
+    
       const pertEstimate = (o + 4 * m + p) / 6;
 
       let storyPoints = 0;
@@ -82,4 +124,3 @@
   </script>
 </body>
 </html>
-
