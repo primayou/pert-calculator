@@ -491,6 +491,17 @@
       { max: Infinity, sp: 20 }
     ];
 
+    const FIB_SCALE = [1, 2, 3, 5, 8, 13, 20];
+
+    function snapDownFib(n) {
+      let result = FIB_SCALE[0];
+      for (const f of FIB_SCALE) {
+        if (f <= n) result = f;
+        else break;
+      }
+      return result;
+    }
+
     const ROLES = ['Backend engineer','Frontend engineer','Mobile engineer','QA engineer','DevOps engineer','Tech lead'];
 
     const DEFAULT_PEOPLE = [
@@ -634,14 +645,16 @@
       if (skipped > 0) alert(`${skipped} team member(s) skipped — missing values.`);
       if (rows.length === 0) return;
 
-      const totalSP = rows.reduce((s, r) => s + r.sp, 0);
+      const rawTotalSP = rows.reduce((s, r) => s + r.sp, 0);
+      const totalSP = snapDownFib(rawTotalSP);
       const blockedCount = rows.filter(r => r.blocked).length;
+      const roundedNote = rawTotalSP !== totalSP ? `rounded down from ${rawTotalSP}` : `${rows.length} member${rows.length !== 1 ? 's' : ''}`;
 
       document.getElementById('summary-cards').innerHTML = `
         <div class="metric-card highlight">
           <div class="m-label">Total story points</div>
           <div class="m-value">${totalSP}</div>
-          <div class="m-sub">across ${rows.length} member${rows.length !== 1 ? 's' : ''}</div>
+          <div class="m-sub">${roundedNote}</div>
         </div>
         <div class="metric-card">
           <div class="m-label">Team members</div>
@@ -666,7 +679,7 @@
       `).join('');
 
       document.getElementById('final-banner').innerHTML = `
-        <span class="fb-label">Total estimate for this ticket</span>
+        <span class="fb-label">Total estimate for this ticket${rawTotalSP !== totalSP ? ' (rounded down to nearest SP)' : ''}</span>
         <span class="fb-value">${totalSP} SP</span>
       `;
 
